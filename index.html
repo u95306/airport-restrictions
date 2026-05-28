@@ -21,6 +21,7 @@
             --btn-sec-hover-bg: #f1f1f1;
             --btn-sec-hover-text: #333333;
             --footer-text: #888888;
+            --border-white-legend: #cccccc; /* 淺色模式下白框改用灰色免得看不見 */
         }
 
         /* 觸發條件：當 body 加上 dark-mode 標籤時，變數自動替換成這組 */
@@ -34,6 +35,7 @@
             --btn-sec-hover-bg: #333333;
             --btn-sec-hover-text: #ffffff;
             --footer-text: #777777;
+            --border-white-legend: #ffffff;
         }
 
         /* =========================================
@@ -48,6 +50,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            box-sizing: border-box;
             
             /* 套用變數，並加上平滑過渡動畫 */
             background-color: var(--bg-color);
@@ -75,9 +78,12 @@
         }
 
         .header { margin-bottom: 20px; margin-top: 20px;}
+        .header h2 { margin: 0 0 10px 0; font-size: 24px; }
+        .header p { margin: 0; font-size: 15px; opacity: 0.8; }
         
         /* 地圖區塊 */
         .map-container {
+            width: 100%;
             max-width: 800px;
             margin: 0 auto;
             background: var(--card-bg);
@@ -85,24 +91,35 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px var(--card-shadow);
             transition: background-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        /* 讓 iframe 寬度完美自適應容器 */
+        .map-container iframe {
+            width: 100%;
+            height: 480px;
+            border: 0;
+            border-radius: 4px;
+            display: block;
         }
         
         /* 圖示說明 */
         .legend-box {
             max-width: 800px;
-            margin: 15px auto 30px;
+            margin: 20px auto 30px;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px 20px;
             font-size: 14px;
             color: var(--legend-text);
             flex-wrap: wrap;
+            padding: 0 10px;
         }
-        .legend-item { display: flex; align-items: center; gap: 6px; }
-        .color-box { width: 16px; height: 16px; border-radius: 3px; }
+        .legend-item { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+        .color-box { width: 16px; height: 16px; border-radius: 3px; box-sizing: border-box; }
         .bg-red { background-color: rgba(255, 0, 0, 0.2); border: 1.5px solid #ff4444; }
         .bg-blue { background-color: rgba(0, 85, 255, 0.2); border: 1.5px solid #4444ff; }
-        .bg-white { background-color: rgba(255, 255, 255, 0.2); border: 1.5px solid #ffffff; }
+        .bg-white { background-color: rgba(255, 255, 255, 0.2); border: 1.5px solid var(--border-white-legend); }
         .bg-green { background-color: rgba(0, 128, 0, 0.2); border: 1.5px solid #00cc00; }
 
         /* 按鈕區塊 */
@@ -111,6 +128,7 @@
             justify-content: center;
             gap: 15px;
             margin-bottom: 40px;
+            padding: 0 10px;
         }
         .btn {
             display: inline-block;
@@ -120,6 +138,7 @@
             font-weight: 600;
             border-radius: 6px;
             transition: all 0.2s ease;
+            white-space: nowrap;
         }
         .btn-primary {
             background-color: #4285F4;
@@ -145,10 +164,66 @@
             padding-top: 30px;
             font-size: 12px;
             color: var(--footer-text);
-            line-height: 1.6;
+            line-height: 1.7;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+        }
+        .footer a {
+            color: inherit;
+            text-decoration: underline;
+        }
+
+        /* =========================================
+           3. 行動裝置響應式排版修正 (RWD)
+           ========================================= */
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 15px;
+            }
+            
+            /* 行動版將切換按鈕改為正常流向，避免與標題重疊 */
+            .theme-toggle-btn {
+                position: static;
+                margin: 0 auto 10px;
+                display: inline-block;
+            }
+            
+            .header {
+                margin-top: 10px;
+                margin-bottom: 15px;
+            }
+            .header h2 {
+                font-size: 20px;
+            }
+            
+            /* 縮減手機版地圖高度，避免佔滿整個螢幕不好滾動 */
+            .map-container {
+                padding: 6px;
+            }
+            .map-container iframe {
+                height: 360px;
+            }
+            
+            /* 按鈕改為垂直填滿排列，方便單手大拇指點擊 */
+            .button-group {
+                flex-direction: column;
+                gap: 12px;
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto 30px;
+                padding: 0;
+            }
+            .btn {
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+            }
+            
+            .legend-box {
+                gap: 10px 15px;
+                margin-bottom: 25px;
+            }
         }
     </style>
 </head>
@@ -162,13 +237,13 @@
     </div>
 
     <div class="map-container">
-        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1RuN6C5WLE_LWxiB-Qvi7stA1i_f3isI&ehbc=2E312F" width="640" height="480"></iframe>
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1RuN6C5WLE_LWxiB-Qvi7stA1i_f3isI&ehbc=2E312F" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
     </div>
 
     <div class="legend-box">
         <div class="legend-item"><div class="color-box bg-red"></div>禁建區 / 水平面限制</div>
         <div class="legend-item"><div class="color-box bg-blue"></div>進場面 (1:50)</div>
-      <div class="legend-item"><div class="color-box bg-white"></div>進場面 (1:40)</div>
+        <div class="legend-item"><div class="color-box bg-white"></div>進場面 (1:40)</div>
         <div class="legend-item"><div class="color-box bg-green"></div>轉接面 (1:7)</div>
     </div>
 
@@ -184,6 +259,7 @@
     <div class="footer">
         <strong>資料來源：</strong> 國防部、內政部公告（中華民國 108 年 7 月 16 日生效版本）<br>
         <strong>最後更新：</strong> 2026年5月<br>
+        <strong>聯絡信箱：</strong> <a href="mailto:rosie000727@gmail.com">rosie000727@gmail.com</a><br>
         <br>
         <strong>免責聲明：</strong> 本網站地圖資訊僅供視覺參考，非官方正式圖資。實際開發、建築與土地使用限制，應以台南市政府及隸屬作戰區之最新正式測量與公告為準。本網站不對因使用此圖資所造成的任何決策負責。
     </div>

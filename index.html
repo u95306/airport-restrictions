@@ -146,8 +146,24 @@
         .bg-white { background-color: rgba(255, 255, 255, 0.2); border: 1.5px solid var(--border-white-legend); }
         .bg-green { background-color: rgba(0, 128, 0, 0.2); border: 1.5px solid #00cc00; }
 
-        /* 按鈕區塊 */
-        .button-group { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; }
+        /* =========================================
+           3. 按鈕區塊設定 (拆分為兩組)
+           ========================================= */
+        .action-group {
+            display: flex;
+            justify-content: center;
+            padding: 0 10px;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+        }
+        /* 地圖按鈕的專屬間距 */
+        .map-action { margin-bottom: 25px; }
+        /* 贊助按鈕的專屬間距 */
+        .sponsor-action { margin-bottom: 40px; }
+
         .btn {
             display: inline-block; padding: 12px 24px; cursor: pointer;
             text-decoration: none; font-size: 15px; font-weight: 600;
@@ -169,7 +185,9 @@
         }
         .footer a { color: inherit; text-decoration: underline; }
 
-        /* 行動裝置響應式排版修正 (RWD) */
+        /* =========================================
+           4. 行動裝置響應式排版修正 (RWD)
+           ========================================= */
         @media (max-width: 600px) {
             body { padding: 20px 15px; }
             .theme-toggle-btn { position: static; margin: 0 auto 10px; display: inline-block; }
@@ -177,8 +195,11 @@
             .header h2 { font-size: 20px; }
             .content-card { padding: 10px; }
             .map-container iframe { height: 360px; }
-            .button-group { flex-direction: column; gap: 12px; width: 100%; max-width: 300px; margin: 0 auto 30px; }
+            
+            /* 手機版按鈕改為滿版 */
+            .action-group { max-width: 300px; padding: 0; }
             .btn { width: 100%; box-sizing: border-box; text-align: center; }
+            
             .form-row { flex-direction: column; gap: 10px; }
         }
     </style>
@@ -203,6 +224,12 @@
         <div class="legend-item"><div class="color-box bg-green"></div>轉接面 (1:7)</div>
     </div>
 
+    <div class="action-group map-action">
+        <a href="https://www.google.com/maps/d/u/0/edit?mid=1RuN6C5WLE_LWxiB-Qvi7stA1i_f3isI&usp=sharing" target="_blank" class="btn btn-primary">
+            🗺️ 在 Google Maps 中開啟
+        </a>
+    </div>
+
     <div class="content-card calculator">
         <h3>📐 絕對高度限制試算 (Beta)</h3>
         <div class="form-row">
@@ -220,7 +247,7 @@
             </div>
             <div class="form-group">
                 <label>⛰️ 跑道基準標高 (m)</label>
-                <input type="number" id="elevationVal" value="19.5" step="0.1">
+                <input type="number" id="elevationVal" value="19.2" step="0.1">
             </div>
         </div>
         <button class="btn btn-calc" onclick="calculateLimit()">計算限高</button>
@@ -229,10 +256,7 @@
             </div>
     </div>
 
-    <div class="button-group">
-        <a href="https://www.google.com/maps/d/u/0/edit?mid=1RuN6C5WLE_LWxiB-Qvi7stA1i_f3isI&usp=sharing" target="_blank" class="btn btn-primary">
-            🗺️ 在 Google Maps 中開啟
-        </a>
+    <div class="action-group sponsor-action">
         <a href="https://paypal.me/YSStudioTW" target="_blank" class="btn btn-secondary">
             ☕ 贊助開發者
         </a>

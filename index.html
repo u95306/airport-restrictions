@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>臺南機場飛安管制區查詢</title>
+    <style>
+        /* =========================================
+           1. CSS 變數：定義淺色與暗色兩套色彩
+           ========================================= */
+        
+        /* 預設：淺色模式 */
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #333333;
+            --card-bg: #ffffff;
+            --card-shadow: rgba(0, 0, 0, 0.05);
+            --legend-text: #555555;
+            --btn-sec-border: #cccccc;
+            --btn-sec-hover-bg: #f1f1f1;
+            --btn-sec-hover-text: #333333;
+            --footer-text: #888888;
+        }
+
+        /* 觸發條件：當 body 加上 dark-mode 標籤時，變數自動替換成這組 */
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --card-shadow: rgba(0, 0, 0, 0.5);
+            --legend-text: #bbbbbb;
+            --btn-sec-border: #555555;
+            --btn-sec-hover-bg: #333333;
+            --btn-sec-hover-text: #ffffff;
+            --footer-text: #777777;
+        }
+
+        /* =========================================
+           2. 網頁排版與樣式設定 (全部改吃 CSS 變數)
+           ========================================= */
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            text-align: center;
+            padding: 40px 20px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            
+            /* 套用變數，並加上平滑過渡動畫 */
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* 右上角的主題切換按鈕 */
+        .theme-toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--btn-sec-border);
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 2px 5px var(--card-shadow);
+            transition: all 0.2s ease;
+        }
+        .theme-toggle-btn:hover {
+            opacity: 0.8;
+        }
+
+        .header { margin-bottom: 20px; margin-top: 20px;}
+        
+        /* 地圖區塊 */
+        .map-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            transition: background-color 0.3s ease;
+        }
+        
+        /* 圖示說明 */
+        .legend-box {
+            max-width: 800px;
+            margin: 15px auto 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 14px;
+            color: var(--legend-text);
+            flex-wrap: wrap;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .color-box { width: 16px; height: 16px; border-radius: 3px; }
+        .bg-red { background-color: rgba(255, 0, 0, 0.2); border: 1.5px solid #ff4444; }
+        .bg-blue { background-color: rgba(0, 85, 255, 0.2); border: 1.5px solid #4444ff; }
+        .bg-white { background-color: rgba(255, 255, 255, 0.2); border: 1.5px solid #ffffff; }
+        .bg-green { background-color: rgba(0, 128, 0, 0.2); border: 1.5px solid #00cc00; }
+
+        /* 按鈕區塊 */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        .btn-primary {
+            background-color: #4285F4;
+            color: white;
+            border: 2px solid #4285F4;
+        }
+        .btn-primary:hover { background-color: #3367D6; border-color: #3367D6; }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--legend-text);
+            border: 2px solid var(--btn-sec-border);
+        }
+        .btn-secondary:hover { 
+            background-color: var(--btn-sec-hover-bg); 
+            color: var(--btn-sec-hover-text); 
+            border-color: var(--btn-sec-border); 
+        }
+
+        /* 頁尾宣告 */
+        .footer {
+            margin-top: auto;
+            padding-top: 30px;
+            font-size: 12px;
+            color: var(--footer-text);
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="theme-toggle-btn" id="themeToggleBtn">🌙 夜覽模式</button>
+
+    <div class="header">
+        <h2>臺南機場重要軍事設施管制區</h2>
+        <p>提供初步視覺對照參考，確保飛航與建築安全。</p>
+    </div>
+
+    <div class="map-container">
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1RuN6C5WLE_LWxiB-Qvi7stA1i_f3isI&ehbc=2E312F" width="640" height="480"></iframe>
+    </div>
+
+    <div class="legend-box">
+        <div class="legend-item"><div class="color-box bg-red"></div>禁建區 / 水平面限制</div>
+        <div class="legend-item"><div class="color-box bg-blue"></div>進場面 (1:50)</div>
+      <div class="legend-item"><div class="color-box bg-white"></div>進場面 (1:40)</div>
+        <div class="legend-item"><div class="color-box bg-green"></div>轉接面 (1:7)</div>
+    </div>
+
+    <div class="button-group">
+        <a href="https://www.google.com/maps/d/u/0/edit?mid=1RuN6C5WLE_LWxiB-Qvi7stA1i_f3isI&usp=sharing" target="_blank" class="btn btn-primary">
+            🗺️ 在 Google Maps 中開啟
+        </a>
+        <a href="在此貼上你的_贊助連結" target="_blank" class="btn btn-secondary">
+            ☕ 贊助開發者
+        </a>
+    </div>
+
+    <div class="footer">
+        <strong>資料來源：</strong> 國防部、內政部公告（中華民國 108 年 7 月 16 日生效版本）<br>
+        <strong>最後更新：</strong> 2026年5月<br>
+        <br>
+        <strong>免責聲明：</strong> 本網站地圖資訊僅供視覺參考，非官方正式圖資。實際開發、建築與土地使用限制，應以台南市政府及隸屬作戰區之最新正式測量與公告為準。本網站不對因使用此圖資所造成的任何決策負責。
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('themeToggleBtn');
+        const body = document.body;
+
+        // 步驟 1: 網頁載入時，檢查瀏覽器記憶體中是否有使用者的設定偏好
+        const currentTheme = localStorage.getItem('theme');
+        
+        // 如果之前儲存過 'dark'，就自動套用暗色模式
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-mode');
+            toggleBtn.textContent = '☀️ 淺色模式';
+        }
+
+        // 步驟 2: 綁定按鈕點擊事件
+        toggleBtn.addEventListener('click', function() {
+            // 切換 dark-mode 的 class (有就拿掉，沒有就加上)
+            body.classList.toggle('dark-mode');
+            
+            // 判斷現在是哪種模式，並更新按鈕文字與儲存偏好
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                toggleBtn.textContent = '☀️ 淺色模式';
+            } else {
+                localStorage.setItem('theme', 'light');
+                toggleBtn.textContent = '🌙 夜覽模式';
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -24,7 +24,7 @@
 ## 🚀 部署與執行 (Deployment)
 
 本專案為純靜態網頁，已透過 GitHub Pages 自動部署上線。
-👉 **[點此造訪網站](https://u95306.github.io/你的Repository名稱/)**
+👉 **[點此造訪網站](https://u95306.github.io/airport-restrictions/)**
 
 ## ⚠️ 免責聲明 (Disclaimer)
 

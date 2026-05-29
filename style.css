@@ -136,7 +136,7 @@ input:focus, select:focus { outline: none; border-color: #4285F4; }
 .bg-red { background-color: rgba(255, 0, 0, 0.2); border: 1.5px solid #ff4444; }
 .bg-blue { background-color: rgba(0, 85, 255, 0.2); border: 1.5px solid #4444ff; }
 .bg-white { background-color: rgba(255, 255, 255, 0.2); border: 1.5px solid var(--border-white-legend); }
-.bg-green { background-color: rgba(0, 85, 0, 0.2); border: 1.5px solid #00cc00; }
+.bg-green { background-color: rgba(0, 85, 0, 0.2); border: 1.5px solid #005500; }
 
 /* =========================================
     3. 按鈕區塊設定 (拆分為兩組)
